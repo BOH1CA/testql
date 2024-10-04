@@ -1,5 +1,5 @@
 // Function to create and display the statistics page
-export function displayStats(userData) {
+export function displayStats(userData, transactionsData, xpProgressData) {
     // Print the token to console
     console.log('token:');
     console.log(localStorage.getItem('jwToken'));
@@ -11,7 +11,7 @@ export function displayStats(userData) {
     // Creating the header container
     const header = document.createElement('div');
     header.id = 'header';
-    
+
     // Left side - GraphQL text
     const graphqlText = document.createElement('h2');
     graphqlText.innerText = 'GraphQL';
@@ -40,7 +40,7 @@ export function displayStats(userData) {
     const userInfo = createUserInfoDiv(userData);
 
     // Creating auditRatio DIV with a pie chart
-    const auditRatioDiv = createAuditRatioDiv(userData);
+    const auditRatioDiv = createAuditRatioDiv(userData, transactionsData);
 
     // Appending userInfo and auditRatioDiv to the cross container
     crossContainer.appendChild(userInfo);
@@ -62,39 +62,16 @@ export function createUserInfoDiv(userData) {
 
     // Creating elements for user information
     const userLogin = document.createElement('h2');
-    const userFirstName = document.createElement('span');
-    const userLastName = document.createElement('span');
-    const userPhone = document.createElement('span');
-    const userMail = document.createElement('span');
-    const userCountry = document.createElement('span');
-    const userCity = document.createElement('span');
-    const userAddr = document.createElement('span');
-
-    // Filling with data from userData
     userLogin.innerText = 'User: ' + (userData.login || 'Login not available');
-    userFirstName.innerText = 'First name: ' + (userData.attrs.firstName || 'First name not available');
-    userLastName.innerText = 'Last name: ' + (userData.attrs.lastName || 'Last name not available');
-    userPhone.innerText = 'Phone: ' + (userData.attrs.tel || 'Phone not available');
-    userMail.innerText = 'E-mail: ' + (userData.attrs.email || 'E-mail not available');
-    userCountry.innerText = 'Country: ' + (userData.attrs.addressCountry || 'Country not available');
-    userCity.innerText = 'City: ' + (userData.attrs.addressCity || 'City not available');
-    userAddr.innerText = 'Address: ' + (userData.attrs.addressStreet || 'Address not available');
 
-    // Appending all elements to userInfo div
+    // Appending user information to userInfo div
     userInfo.appendChild(userLogin);
-    userInfo.appendChild(userFirstName);
-    userInfo.appendChild(userLastName);
-    userInfo.appendChild(userPhone);
-    userInfo.appendChild(userMail);
-    userInfo.appendChild(userCountry);
-    userInfo.appendChild(userCity);
-    userInfo.appendChild(userAddr);
 
     return userInfo;
 }
 
 // Function to create the audit ratio div with a pie chart
-export function createAuditRatioDiv(userData) {
+export function createAuditRatioDiv(userData, transactionsData) {
     // Creating auditRatio div
     const auditRatioDiv = document.createElement('div');
     auditRatioDiv.id = 'auditRatioDiv';
@@ -105,10 +82,16 @@ export function createAuditRatioDiv(userData) {
 
     // Creating paragraphs for Received XP and Given XP
     const receivedXP = document.createElement('p');
-    receivedXP.innerText = 'Received XP: ' + (userData.receivedXP || 0);
-
     const givenXP = document.createElement('p');
-    givenXP.innerText = 'Given XP: ' + (userData.givenXP || 0);
+
+    // Calculate Received XP and Given XP from transactionsData
+    const receivedXPValue = transactionsData.filter(tx => tx.type === 'xp' && tx.amount > 0)
+                                             .reduce((acc, tx) => acc + tx.amount, 0);
+    const givenXPValue = transactionsData.filter(tx => tx.type === 'xp' && tx.amount < 0)
+                                         .reduce((acc, tx) => acc + Math.abs(tx.amount), 0);
+
+    receivedXP.innerText = 'Received XP: ' + receivedXPValue;
+    givenXP.innerText = 'Given XP: ' + givenXPValue;
 
     // Creating a div for the pie chart
     const pieChartDiv = document.createElement('div');
@@ -166,6 +149,7 @@ function createPiePath(angle, cx, cy, radius, svgNS, color) {
 
     return path;
 }
+
 
 
 
