@@ -39,7 +39,7 @@ export function displayStats(userData) {
     // Creating userInfo DIV by calling createUserInfoDiv function
     const userInfo = createUserInfoDiv(userData);
 
-    // Creating auditRatio DIV by calling createAuditRatioDiv function
+    // Creating auditRatio DIV with a pie chart
     const auditRatioDiv = createAuditRatioDiv(userData);
 
     // Appending userInfo and auditRatioDiv to the cross container
@@ -93,35 +93,71 @@ export function createUserInfoDiv(userData) {
     return userInfo;
 }
 
-// Function to create the audit ratio div
+// Function to create the audit ratio div with a pie chart
 export function createAuditRatioDiv(userData) {
-    // Creating the auditRatioDiv
+    // Creating auditRatio div
     const auditRatioDiv = document.createElement('div');
     auditRatioDiv.id = 'auditRatioDiv';
 
-    // Heading for the section
+    // Creating a heading for the audit ratio
     const auditRatioHeading = document.createElement('h2');
-    auditRatioHeading.innerText = 'Audit Ratio';
+    auditRatioHeading.innerText = 'Audit Ratio: ' + userData.auditRatio.toFixed(2);
+
+    // Creating a div for the pie chart
+    const pieChartDiv = document.createElement('div');
+    pieChartDiv.id = 'pieChartDiv';
+
+    // Calling function to render the pie chart inside pieChartDiv
+    renderPieChart(userData, pieChartDiv);
+
+    // Appending the heading and the pie chart to auditRatioDiv
     auditRatioDiv.appendChild(auditRatioHeading);
-
-    // Display Received XP
-    const receivedXP = document.createElement('p');
-    receivedXP.innerText = 'Received XP: ' + (userData.receivedXP || 0);
-    auditRatioDiv.appendChild(receivedXP);
-
-    // Display Given XP
-    const givenXP = document.createElement('p');
-    givenXP.innerText = 'Given XP: ' + (userData.givenXP || 0);
-    auditRatioDiv.appendChild(givenXP);
-
-    // Display Ratio (Given XP / Received XP)
-    const ratio = (userData.receivedXP > 0) ? (userData.givenXP / userData.receivedXP).toFixed(2) : 'N/A';
-    const ratioElement = document.createElement('p');
-    ratioElement.innerText = 'Ratio (Given / Received): ' + ratio;
-    auditRatioDiv.appendChild(ratioElement);
+    auditRatioDiv.appendChild(pieChartDiv);
 
     return auditRatioDiv;
 }
+
+// Function to render the pie chart
+export function renderPieChart(userData, pieChartDiv) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const pieChartSVG = document.createElementNS(svgNS, 'svg');
+    pieChartSVG.setAttribute('width', '200');
+    pieChartSVG.setAttribute('height', '200');
+
+    // Assuming you have a ratio value between 0 and 1, calculate angles
+    const passedRatio = userData.auditRatio || 0; // Example ratio
+    const remainingRatio = 1 - passedRatio;
+
+    // Calculate angles for the pie chart
+    const passedAngle = passedRatio * 360;
+    const remainingAngle = remainingRatio * 360;
+
+    // Create paths for passed audits and remaining audits
+    const passedPath = createPiePath(passedAngle, 100, 100, 100, svgNS, '#4caf50');
+    const remainingPath = createPiePath(remainingAngle, 100, 100, 100, svgNS, '#f44336');
+
+    // Append paths to the SVG
+    pieChartSVG.appendChild(passedPath);
+    pieChartSVG.appendChild(remainingPath);
+
+    // Append SVG to the pieChartDiv
+    pieChartDiv.appendChild(pieChartSVG);
+}
+
+// Helper function to create SVG path for pie chart
+function createPiePath(angle, cx, cy, radius, svgNS, color) {
+    const largeArcFlag = angle > 180 ? 1 : 0;
+    const x = cx + radius * Math.cos((angle - 90) * (Math.PI / 180));
+    const y = cy + radius * Math.sin((angle - 90) * (Math.PI / 180));
+
+    const path = document.createElementNS(svgNS, 'path');
+    const d = `M ${cx} ${cy} L ${cx + radius} ${cy} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+    path.setAttribute('d', d);
+    path.setAttribute('fill', color);
+
+    return path;
+}
+
 
 
 
