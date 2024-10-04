@@ -48,7 +48,7 @@ const loginRequest = async (username, password) => {
 };
 
 // Function to create and handle the login form
-export function createLoginForm() {
+export function loginForm() {
     // Creating the form elements
     const form = document.createElement('form');
     form.id = 'loginForm';
