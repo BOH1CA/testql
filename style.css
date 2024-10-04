@@ -3,10 +3,43 @@
     display: flex; /* Use flexbox for layout */
     justify-content: space-between; /* Space between title and logout button */
     align-items: center; /* Center items vertically */
-    background-color: #f8f8f8; /* Light background color */
+    background-color: #b3fcb9; /* Light background color */
     padding: 10px 20px; /* Padding for spacing */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
 }
+
+/* Body Styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Using Roboto font */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Padding around the body */
+    background-color: #f4f4f4; /* Light grey background for contrast */
+}
+
+/* User Info Styles */
+#userInfo {
+    background-color: #ffffff; /* White background */
+    padding: 15px; /* Padding inside the user info div */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 20px; /* Margin below user info for spacing */
+}
+
+/* User Info Header Styles */
+#userInfo h2 {
+    margin-bottom: 10px; /* Margin below the header */
+    font-size: 20px; /* Font size for the header */
+}
+
+/* User Info Span Styles */
+#userInfo span {
+    display: block; /* Stack span elements vertically */
+    margin: 5px 0; /* Margin between span elements */
+    font-size: 16px; /* Font size for text */
+    color: #333; /* Darker text color for readability */
+}
+
 
 /* Title Styles */
 #title {
@@ -60,7 +93,7 @@ input[type="password"] {
 
 /* Button Styles */
 button {
-    background-color: #007bff; /* Button color */
+    background-color: #6f2a73; /* Button color */
     color: white; /* Button text color */
     padding: 10px; /* Padding for button */
     border: none; /* No border */
@@ -71,6 +104,6 @@ button {
 
 /* Button Hover Effect */
 button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #f552ff; /* Darker shade on hover */
 }
 
