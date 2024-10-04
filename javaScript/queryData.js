@@ -37,42 +37,60 @@ export async function retriveData() {
     try {
         const jwToken = await getJwtToken();
         console.debug('Using token:', jwToken); // Log token for debugging
-
         const query = `
-            query {
-                user {
-                    login
-                    auditRatio
-                    totalUp
-                    totalDown
-                    }
-                    attrs
-                    transactions(
-                        order_by: [{ type: asc }, { amount: asc }],
-                        distinct_on: [type],
-                        where: { type: { _like: "skill_%" } }
-                    ) { 
-                        type
-                        amount
-                    }
-                    xps(
-                        where: { path: { _nregex: "piscine-(go|js)" } },
-                        order_by: { amount: asc }
-                    ) {
-                        amount
-                        path
-                    }
-                    progresses(
-                        order_by: { createdAt: asc },
-                        where: { path: { _nregex: "piscine-(go|js)" } }
-                    ) {
-                        createdAt
-                        path
-                    }
-                }
+        query {
+          user {
+            id
+            login
+            auditRatio
+            totalUp
+            totalDown
+          }
+          transaction (
+            order_by: {createdAt: desc}
+            where: { 
+              type: {_eq: xp}
+              path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
-        `;
-
+          ) {
+            amount
+            objectId
+            userId
+            path
+            type
+            object {
+              name
+            }
+          }
+          xpProgress: transaction (
+            order_by: {createdAt: asc}
+            where: { 
+              type: {_eq: xp}
+              path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
+            }
+          ) {
+            amount
+            createdAt
+          }
+          projectsLowtoHighXp: transaction (
+            order_by: {amount: desc}
+            where: { 
+              type: {_eq: xp}
+              path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
+            }
+            limit: 10
+          ) {
+            amount
+            objectId
+            path
+            type
+            object {
+              name
+            }
+          }
+        }
+      `;
+      
         const responseData = await fetchGraphQLData(query, jwToken);
         console.debug('GraphQL Response:', responseData); // Log for debugging
 
