@@ -1,6 +1,6 @@
 import { drawXPGraph } from './xpGraph.js';
 import { mouseHover } from './xpGraph.js';
-import { renderPieChart } from './skillCircle.js';
+import { drawSkillCircle } from './skillCircle.js';
 
 // Function to create and display the statistics page
 export function createStatPage(userData) {
@@ -45,14 +45,14 @@ export function createStatPage(userData) {
     const userCity = document.createElement('span');
     const userAddr = document.createElement('span');
     // Filling with Data
-    userLogin.innerText = 'User: ' + (userData.login || 'Login not available');
+    userLogin.innerText = 'User: ' + userData.login || 'Login not available';
     userFirstName.innerText = userData.attrs.firstName || 'First name not available';
     userLastName.innerText = userData.attrs.lastName || 'Last name not available';
     userPhone.innerText = userData.attrs.tel || 'Phone not available';
     userMail.innerText = userData.attrs.email || 'E-mail not available';
     userCountry.innerText = userData.attrs.addressCountry || 'Country not available';
-    userCity.innerText = userData.attrs.addressCity || 'City not available';
-    userAddr.innerText = userData.attrs.addressStreet || 'Address not available';
+    userCity.innerText = userData.attrs.addressCity || 'Phone not available';
+    userAddr.innerText = userData.attrs.addressStreet || 'E-mail not available';
     // Adding LogOut button
     const logoutButton = document.createElement('button');
     logoutButton.type = 'button';
@@ -99,12 +99,8 @@ export function createStatPage(userData) {
     // Drawing the skill graph inside the skillsGraph div
     drawXPGraph(userData, 'skillsGraph');
 
-    // Extract audit values from userData for the pie chart
-    const auditDone = userData.audits_aggregate.aggregate.count; // Or whatever property corresponds to "done"
-    const auditReceived = userData.receivedAudits || 0; // Adjust as necessary
-
     // Drawing the skill circle #1 inside the skillCircle div
-    renderPieChart(auditDone, auditReceived); // Pass the values for auditDone and auditReceived
+    drawSkillCircle(userData, 'skillBasicSVG');
 
     // Adding event listener for logoutButton click
     logoutButton.addEventListener('click', function(event) {
@@ -125,7 +121,7 @@ export function createStatPage(userData) {
 }
 
 // Helper function for calculating total amount of XP
-function xpCalc(userData) {
+function xpCalc (userData) {
     let xpSum = 0;
     if (userData) {
         userData.xps.forEach(xp => {
