@@ -1,4 +1,4 @@
-import { createLoginForm } from './authentication.js'
+import { loginForm } from './authentication.js'
 import { fetchUserData } from './query.js'
 import { createStatPage } from './statPage.js'
 
@@ -21,6 +21,6 @@ if (localStorage.getItem('jwToken')) {
 
 } else {
 
-    createLoginForm();
+    loginForm();
 
 }
