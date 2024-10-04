@@ -1,3 +1,4 @@
+// Function to handle the login request
 const loginRequest = async (username, password) => {
     // Encode username and password in base64 for Basic Authentication
     const encodeInfo = btoa(`${username}:${password}`);
@@ -12,16 +13,16 @@ const loginRequest = async (username, password) => {
             }
         });
 
-        // Log the full response for debugging
-        console.log('Full response:', response);
-
         // Check if the response is okay (status in the range 200-299)
         if (!response.ok) {
             throw new Error('Sign in Failed');
         }
 
-        // Since the response is a plain string (JWT), retrieve the token as text
-        const token = await response.text();
+        // Assuming the response contains a JSON object with the token
+        const jsonResponse = await response.json();
+        
+        // Extract the token from the JSON response
+        const token = jsonResponse.token || jsonResponse.jwt || ''; // Adjust based on API response
 
         // Log the token for debugging purposes
         console.log('Parsed response token:', token);
@@ -46,45 +47,48 @@ const loginRequest = async (username, password) => {
     }
 };
 
-export function loginForm() {
+// Function to create and handle the login form
+export function createLoginForm() {
+    // Creating the form elements
     const form = document.createElement('form');
-    const title = document.createElement('p');
-    const inputUser = document.createElement('input');
-    const inputPassword = document.createElement('input');
-    const submitButton = document.createElement('button');
-
     form.id = 'loginForm';
-    title.id = 'title';
-    inputUser.id = 'username';
-    inputPassword.id = 'password';
 
-    inputUser.type = 'text';
-    inputPassword.type = 'password';
-    submitButton.type = 'submit';
+    const loginTitle = document.createElement('p');
+    loginTitle.id = 'login-title';
+    loginTitle.textContent = 'GraphQL: login';
 
-    title.textContent = 'GraphQL';
-    inputUser.placeholder = 'Username or Email';
-    inputPassword.placeholder = 'Password';
-    inputUser.required = true;
-    inputPassword.required = true;
-    submitButton.textContent = 'Login';
+    const usernameInput = document.createElement('input');
+    usernameInput.type = 'text';
+    usernameInput.id = 'username';
+    usernameInput.placeholder = 'Username or Email';
+    usernameInput.required = true;
 
-    // Append all elements in one call
-    form.append(title, inputUser, inputPassword, submitButton);
+    const passwordInput = document.createElement('input');
+    passwordInput.type = 'password';
+    passwordInput.id = 'password';
+    passwordInput.placeholder = 'Password';
+    passwordInput.required = true;
+
+    const loginButton = document.createElement('button');
+    loginButton.type = 'submit';
+    loginButton.textContent = 'Login';
+
+    // Appending the elements to the form
+    form.append(loginTitle, usernameInput, passwordInput, loginButton);
     document.body.appendChild(form);
 
-    // Event listener for form submission
-    form.addEventListener('submit', async (event) => {
+    // Adding event listener for form submission
+    form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const username = inputUser.value;
-        const password = inputPassword.value;
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
         try {
-            // Ensure the login request is complete before any action
-            const result = await loginRequest(username, password);
+            // Perform login request and store token if successful
+            const token = await loginRequest(username, password);
 
-            if (result) {
+            if (token) {
                 alert("Login successful!");
 
                 // Ensure token is set in localStorage before redirecting
@@ -96,7 +100,8 @@ export function loginForm() {
                 }
             }
         } catch (error) {
-            alert(error.message); 
+            alert(error.message);
         }
     });
 }
+
