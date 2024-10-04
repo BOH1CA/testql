@@ -43,10 +43,8 @@ export async function retriveData() {
                 user {
                     login
                     auditRatio
-                    audits_aggregate(where: { grade: { _neq: 0 } }) {
-                        aggregate {
-                            count
-                        }
+                    totalUp
+                    totalDown
                     }
                     attrs
                     transactions(
