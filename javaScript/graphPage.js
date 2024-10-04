@@ -39,7 +39,7 @@ export function displayStats(userData) {
     // Creating userInfo DIV by calling createUserInfoDiv function
     const userInfo = createUserInfoDiv(userData);
 
-    // Creating auditRatio DIV with a pie chart
+    // Creating auditRatio DIV by calling createAuditRatioDiv function
     const auditRatioDiv = createAuditRatioDiv(userData);
 
     // Appending userInfo and auditRatioDiv to the cross container
@@ -93,32 +93,36 @@ export function createUserInfoDiv(userData) {
     return userInfo;
 }
 
-// Function to create the audit ratio div with a donut chart and XP amounts
+// Function to create the audit ratio div
 export function createAuditRatioDiv(userData) {
-    // Creating auditRatio div
+    // Creating the auditRatioDiv
     const auditRatioDiv = document.createElement('div');
     auditRatioDiv.id = 'auditRatioDiv';
 
-    // Creating a heading for the audit ratio
+    // Heading for the section
     const auditRatioHeading = document.createElement('h2');
-    auditRatioHeading.innerText = 'Audits Chart';
-
-    // Creating a div for XP amounts
-    const xpInfoDiv = document.createElement('div');
-    xpInfoDiv.id = 'xpInfoDiv';
-    const receivedXP = document.createElement('p');
-    const doneXP = document.createElement('p');
-    receivedXP.innerText = `Received audit XP: ${userData.receivedAuditXP.toFixed(2)} MiB`;
-    doneXP.innerText = `Done audit XP: ${userData.doneAuditXP.toFixed(2)} MiB`;
-
-    xpInfoDiv.appendChild(receivedXP);
-    xpInfoDiv.appendChild(doneXP);
-
-    // Appending the heading, the pie chart, and the XP amounts to auditRatioDiv
+    auditRatioHeading.innerText = 'Audit Ratio';
     auditRatioDiv.appendChild(auditRatioHeading);
-    auditRatioDiv.appendChild(pieChartDiv);
-    auditRatioDiv.appendChild(xpInfoDiv);
+
+    // Display Received XP
+    const receivedXP = document.createElement('p');
+    receivedXP.innerText = 'Received XP: ' + (userData.receivedXP || 0);
+    auditRatioDiv.appendChild(receivedXP);
+
+    // Display Given XP
+    const givenXP = document.createElement('p');
+    givenXP.innerText = 'Given XP: ' + (userData.givenXP || 0);
+    auditRatioDiv.appendChild(givenXP);
+
+    // Display Ratio (Given XP / Received XP)
+    const ratio = (userData.receivedXP > 0) ? (userData.givenXP / userData.receivedXP).toFixed(2) : 'N/A';
+    const ratioElement = document.createElement('p');
+    ratioElement.innerText = 'Ratio (Given / Received): ' + ratio;
+    auditRatioDiv.appendChild(ratioElement);
 
     return auditRatioDiv;
 }
+
+
+
 
