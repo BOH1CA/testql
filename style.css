@@ -1,126 +1,76 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
+/* Header Styles */
+#header {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between title and logout button */
+    align-items: center; /* Center items vertically */
+    background-color: #f8f8f8; /* Light background color */
+    padding: 10px 20px; /* Padding for spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-#loginForm {
-    width: 100%;
-    max-width: 450px;
-    padding: 25px;
-    border: 2px solid #007bff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+/* Title Styles */
+#title {
+    font-size: 24px; /* Font size for the title */
+    font-weight: bold; /* Bold text */
 }
 
-#loginForm input {
-    width: 98%;
-    padding: 12px;
-    margin: 12px 0;
-    border: 1px solid #888;
-}
-
-#loginForm button {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-#error-message {
-    color: #d9534f;
-    display: none;
-}
-
+/* Stat Page Styles */
 #statPage {
-    width: 100%;
-    height: 99%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center align items */
+    padding: 20px; /* Padding for spacing */
 }
 
+/* Cross Container Styles */
 #crossContainer {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between main sections */
+    width: 100%; /* Full width */
+    margin-top: 20px; /* Margin above the cross container */
 }
 
-#userInfo, #xpInfo {
-    width: 48%;
-    height: 35%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    border: 2px solid #007bff;
-    margin: 15px;
+/* Login Form Styles */
+#loginForm {
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack inputs vertically */
+    background-color: #ffffff; /* White background */
+    padding: 20px; /* Padding for spacing */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    max-width: 400px; /* Max width for the form */
+    margin: auto; /* Center the form */
 }
 
-#skillsGraph, #skillCircle {
-    width: 48%;
-    height: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    border: 2px solid #007bff;
-    margin: 15px;
+/* Title Styles for the Form */
+#title {
+    font-size: 24px; /* Font size for the title */
+    margin-bottom: 20px; /* Margin below the title */
 }
 
-#skillBasicSVG {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+/* Input Field Styles */
+input[type="text"],
+input[type="password"] {
+    padding: 10px; /* Padding for inputs */
+    margin-bottom: 15px; /* Margin below each input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners for inputs */
+    font-size: 16px; /* Font size for inputs */
 }
 
-#userInfo button {
-    width: 95%;
-    padding: 12px;
-    margin: 15px 0;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    cursor: pointer;
+/* Button Styles */
+button {
+    background-color: #007bff; /* Button color */
+    color: white; /* Button text color */
+    padding: 10px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for button */
 }
 
-#skillsGraph {
-    overflow: hidden; /* Ensure content does not overflow */
-    position: relative; /* Needed for absolute positioning */
+/* Button Hover Effect */
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
-#skillsGraph:hover .stats-svg {
-    transition: transform 0.1s ease-in-out; /* Smooth transition */
-}
-  
-.line {
-    fill: none;
-    stroke: #0056b3;
-    stroke-width: 2;
-}
-  
-.dot {
-    fill: #dc3545;
-}
-
-.label {
-    font-size: 12px;
-    fill: #333;
-    user-select: none; /* Prevent text selection/highlighting */
-    -webkit-user-select: none; /* For Safari */
-    -moz-user-select: none; /* For Firefox */
-    -ms-user-select: none; /* For Internet Explorer/Edge */
-}
