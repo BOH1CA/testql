@@ -103,6 +103,13 @@ export function createAuditRatioDiv(userData) {
     const auditRatioHeading = document.createElement('h2');
     auditRatioHeading.innerText = 'Audit Ratio: ' + userData.auditRatio.toFixed(2);
 
+    // Creating paragraphs for Received XP and Given XP
+    const receivedXP = document.createElement('p');
+    receivedXP.innerText = 'Received XP: ' + (userData.receivedXP || 0);
+
+    const givenXP = document.createElement('p');
+    givenXP.innerText = 'Given XP: ' + (userData.givenXP || 0);
+
     // Creating a div for the pie chart
     const pieChartDiv = document.createElement('div');
     pieChartDiv.id = 'pieChartDiv';
@@ -110,8 +117,10 @@ export function createAuditRatioDiv(userData) {
     // Calling function to render the pie chart inside pieChartDiv
     renderPieChart(userData, pieChartDiv);
 
-    // Appending the heading and the pie chart to auditRatioDiv
+    // Appending the heading, XP values, and pie chart to auditRatioDiv
     auditRatioDiv.appendChild(auditRatioHeading);
+    auditRatioDiv.appendChild(receivedXP);
+    auditRatioDiv.appendChild(givenXP);
     auditRatioDiv.appendChild(pieChartDiv);
 
     return auditRatioDiv;
