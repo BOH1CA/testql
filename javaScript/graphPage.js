@@ -93,7 +93,7 @@ export function createUserInfoDiv(userData) {
     return userInfo;
 }
 
-// Function to create the audit ratio div with a pie chart
+// Function to create the audit ratio div with a donut chart and XP amounts
 export function createAuditRatioDiv(userData) {
     // Creating auditRatio div
     const auditRatioDiv = document.createElement('div');
@@ -101,67 +101,87 @@ export function createAuditRatioDiv(userData) {
 
     // Creating a heading for the audit ratio
     const auditRatioHeading = document.createElement('h2');
-    auditRatioHeading.innerText = 'Audit Ratio: ' + userData.auditRatio.toFixed(2);
+    auditRatioHeading.innerText = 'Audits Chart';
 
-    // Creating a div for the pie chart
+    // Creating a div for the donut chart
     const pieChartDiv = document.createElement('div');
     pieChartDiv.id = 'pieChartDiv';
 
-    // Calling function to render the pie chart inside pieChartDiv
-    renderPieChart(userData, pieChartDiv);
+    // Calling function to render the donut chart inside pieChartDiv
+    renderDonutChart(userData, pieChartDiv);
 
-    // Appending the heading and the pie chart to auditRatioDiv
+    // Creating a div for XP amounts
+    const xpInfoDiv = document.createElement('div');
+    xpInfoDiv.id = 'xpInfoDiv';
+    const receivedXP = document.createElement('p');
+    const doneXP = document.createElement('p');
+    receivedXP.innerText = `Received audit XP: ${userData.receivedAuditXP.toFixed(2)} MiB`;
+    doneXP.innerText = `Done audit XP: ${userData.doneAuditXP.toFixed(2)} MiB`;
+
+    xpInfoDiv.appendChild(receivedXP);
+    xpInfoDiv.appendChild(doneXP);
+
+    // Appending the heading, the pie chart, and the XP amounts to auditRatioDiv
     auditRatioDiv.appendChild(auditRatioHeading);
     auditRatioDiv.appendChild(pieChartDiv);
+    auditRatioDiv.appendChild(xpInfoDiv);
 
     return auditRatioDiv;
 }
 
-// Function to render the pie chart
-export function renderPieChart(userData, pieChartDiv) {
+// Function to render the donut chart
+export function renderDonutChart(userData, pieChartDiv) {
     const svgNS = "http://www.w3.org/2000/svg";
-    const pieChartSVG = document.createElementNS(svgNS, 'svg');
-    pieChartSVG.setAttribute('width', '200');
-    pieChartSVG.setAttribute('height', '200');
+    const donutChartSVG = document.createElementNS(svgNS, 'svg');
+    donutChartSVG.setAttribute('width', '200');
+    donutChartSVG.setAttribute('height', '200');
+    donutChartSVG.setAttribute('viewBox', '0 0 200 200');
 
-    // Assuming you have a ratio value between 0 and 1, calculate angles
-    const passedRatio = userData.auditRatio || 0; // Example ratio
-    const remainingRatio = 1 - passedRatio;
+    const totalXP = userData.receivedAuditXP + userData.doneAuditXP;
+    const receivedRatio = userData.receivedAuditXP / totalXP;
+    const doneRatio = 1 - receivedRatio; // Complementary ratio
 
-    // Calculate angles for the pie chart in radians
-    const passedAngle = passedRatio * 2 * Math.PI;  // Convert to radians
-    const remainingAngle = remainingRatio * 2 * Math.PI;  // Convert to radians
-
-    // Create paths for passed audits and remaining audits
-    const passedPath = createPiePath(passedRatio, 100, 100, 100, svgNS, '#4caf50', true);
-    const remainingPath = createPiePath(remainingRatio, 100, 100, 100, svgNS, '#f44336', false);
+    // Create paths for received and done audits
+    const receivedPath = createDonutPath(receivedRatio, 100, 100, 90, 60, svgNS, '#ba68c8', true);
+    const donePath = createDonutPath(doneRatio, 100, 100, 90, 60, svgNS, '#42a5f5', false);
 
     // Append paths to the SVG
-    pieChartSVG.appendChild(passedPath);
-    pieChartSVG.appendChild(remainingPath);
+    donutChartSVG.appendChild(receivedPath);
+    donutChartSVG.appendChild(donePath);
 
     // Append SVG to the pieChartDiv
-    pieChartDiv.appendChild(pieChartSVG);
+    pieChartDiv.appendChild(donutChartSVG);
 }
 
-// Helper function to create SVG path for pie chart
-function createPiePath(ratio, cx, cy, radius, svgNS, color, isFirstSegment) {
+// Helper function to create SVG path for donut chart
+function createDonutPath(ratio, cx, cy, outerRadius, innerRadius, svgNS, color, isFirstSegment) {
     const angle = ratio * 2 * Math.PI;  // Full circle in radians
     const largeArcFlag = ratio > 0.5 ? 1 : 0;
 
-    const x = cx + radius * Math.cos(angle - Math.PI / 2);
-    const y = cy + radius * Math.sin(angle - Math.PI / 2);
+    // Coordinates for the outer arc
+    const x1 = cx + outerRadius * Math.cos(-Math.PI / 2);
+    const y1 = cy + outerRadius * Math.sin(-Math.PI / 2);
+    const x2 = cx + outerRadius * Math.cos(angle - Math.PI / 2);
+    const y2 = cy + outerRadius * Math.sin(angle - Math.PI / 2);
 
+    // Coordinates for the inner arc
+    const x3 = cx + innerRadius * Math.cos(angle - Math.PI / 2);
+    const y3 = cy + innerRadius * Math.sin(angle - Math.PI / 2);
+    const x4 = cx + innerRadius * Math.cos(-Math.PI / 2);
+    const y4 = cy + innerRadius * Math.sin(-Math.PI / 2);
+
+    // Create the path using arc commands
     const path = document.createElementNS(svgNS, 'path');
-    const moveTo = `M ${cx} ${cy}`;  // Move to the center of the circle
-    const lineTo = `L ${cx + radius} ${cy}`;  // Line to the edge of the circle
-    const arc = `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x} ${y}`;  // Create arc
-    const closePath = 'Z';  // Close the path
+    const outerArc = `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`;
+    const lineToInner = `L ${x3} ${y3}`;
+    const innerArc = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4}`;
+    const closePath = 'Z';
 
-    // If it's the first segment, we draw the full arc; otherwise, just draw the remainder.
-    const d = isFirstSegment ? `${moveTo} ${lineTo} ${arc} ${closePath}` : `${moveTo} ${arc} ${closePath}`;
+    // Combine the parts of the path into the 'd' attribute
+    const d = `${outerArc} ${lineToInner} ${innerArc} ${closePath}`;
     path.setAttribute('d', d);
     path.setAttribute('fill', color);
 
     return path;
 }
+
