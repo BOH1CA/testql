@@ -86,7 +86,6 @@ function createUserInfoDiv(userData) {
     userInfo.appendChild(userCountry);
     userInfo.appendChild(userCity);
     userInfo.appendChild(userAddr);
-    userInfo.appendChild(logoutButton);
 
     // Adding event listener for logoutButton click
     logoutButton.addEventListener('click', function(event) {
