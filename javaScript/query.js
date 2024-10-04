@@ -3,7 +3,12 @@ export async function fetchUserData() {
     if (!jwToken) {
         throw new Error('jwToken not found');
     }
+
     try {
+        // Log token for debugging
+        console.log('Using token:', jwToken);
+
+        // Make the GraphQL query
         const response = await fetch('https://01.kood.tech/api/graphql-engine/v1/graphql', {
             method: 'POST',
             headers: {
@@ -50,17 +55,25 @@ export async function fetchUserData() {
                 `
             })
         });
+
+        // Check if the response was successful
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const { data } = await response.json();
+
+        // Log the full response for debugging
+        const responseData = await response.json();
+        console.log('GraphQL Response:', responseData);
+
+        // Check if data and user field exists
+        const { data } = responseData;
         if (data && data.user && data.user.length > 0) {
-            return data.user[0];
+            return data.user[0]; // Return the first user object
         } else {
             throw new Error('User data not found');
         }
     } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error.message);
         return false;
     }
 }
