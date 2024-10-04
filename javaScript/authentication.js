@@ -20,7 +20,7 @@ const loginRequest = async (username, password) => {
         // Check Content-Type to determine if the response is JSON
         const contentType = response.headers.get('Content-Type');
         let data;
-        
+
         // Parse the response as JSON only if it's application/json
         if (contentType && contentType.includes('application/json')) {
             data = await response.json();
@@ -33,6 +33,9 @@ const loginRequest = async (username, password) => {
                 throw new Error('Unexpected response format from server');
             }
         }
+
+        // Log the entire response data for debugging purposes
+        console.log('Response from server:', data);
 
         // Store the JWT in localStorage (ensure it's in the expected property)
         if (data.token) {
