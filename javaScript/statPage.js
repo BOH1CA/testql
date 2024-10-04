@@ -31,6 +31,13 @@ export function createStatPage(userData) {
 
     // Appending the logout button to the header
     header.appendChild(logoutButton);
+    
+    // Adding event listener for logoutButton click
+    logoutButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        localStorage.removeItem('jwToken');
+        location.reload();
+    });
 
     // Creating a container for the cross layout
     const crossContainer = document.createElement('div');
@@ -48,6 +55,8 @@ export function createStatPage(userData) {
 
     // Adding contents to the body
     document.body.appendChild(page);
+
+    
 
 }
 
@@ -87,12 +96,7 @@ function createUserInfoDiv(userData) {
     userInfo.appendChild(userCity);
     userInfo.appendChild(userAddr);
 
-    // Adding event listener for logoutButton click
-    logoutButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        localStorage.removeItem('jwToken');
-        location.reload();
-    });
+    
 
     return userInfo; // Return the complete userInfo div
 }
