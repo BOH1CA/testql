@@ -17,8 +17,22 @@ const loginRequest = async (username, password) => {
             throw new Error('Sign in Failed');
         }
 
-        // Parse the JSON response to get the user data
-        const data = await response.json();
+        // Check Content-Type to determine if the response is JSON
+        const contentType = response.headers.get('Content-Type');
+        let data;
+        
+        // Parse the response as JSON only if it's application/json
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            // If the content is not JSON, get it as text or other formats
+            const textData = await response.text();
+            try {
+                data = JSON.parse(textData); // In case it is JSON as a string
+            } catch {
+                throw new Error('Unexpected response format from server');
+            }
+        }
 
         // Store the JWT in localStorage (ensure it's in the expected property)
         if (data.token) {
@@ -39,6 +53,7 @@ const loginRequest = async (username, password) => {
         }
     }
 };
+
 
 
 // Function to create loginForm
@@ -87,12 +102,4 @@ export function loginForm() {
             alert(error.message); 
         }
     });
-}
-
-
-// Logout function for clearing JWT and redirecting
-export function logout() {
-    localStorage.clear();  // Clears all local storage
-    location.reload();  // Reloads the current page
-    window.location.href = 'index.html';  // Redirects to the login page
 }
