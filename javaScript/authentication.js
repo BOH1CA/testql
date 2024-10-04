@@ -12,7 +12,7 @@ const loginRequest = async (username, password) => {
             }
         });
 
-        // Log the entire response object to see all headers and status code
+        // Log the full response for debugging
         console.log('Full response:', response);
 
         // Check if the response is okay (status in the range 200-299)
@@ -20,35 +20,21 @@ const loginRequest = async (username, password) => {
             throw new Error('Sign in Failed');
         }
 
-        // Check Content-Type to determine if the response is JSON
-        const contentType = response.headers.get('Content-Type');
-        let data;
+        // Since the response is a plain string (JWT), retrieve the token as text
+        const token = await response.text();
 
-        // Parse the response as JSON only if it's application/json
-        if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
-        } else {
-            // If the content is not JSON, get it as text or other formats
-            const textData = await response.text();
-            try {
-                data = JSON.parse(textData); // In case it is JSON as a string
-            } catch {
-                throw new Error('Unexpected response format from server');
-            }
-        }
+        // Log the token for debugging purposes
+        console.log('Parsed response token:', token);
 
-        // Log the entire response data to see the structure
-        console.log('Parsed response data:', data);
-
-        // Store the JWT in localStorage (ensure it's in the expected property)
-        if (data.token) {
-            localStorage.setItem('jwToken', data.token); // Store token for later use
+        // Store the JWT in localStorage
+        if (token) {
+            localStorage.setItem('jwToken', token); // Store token for later use
         } else {
             throw new Error('Token not found in response');
         }
 
-        // Return user data (if needed)
-        return data;
+        // Return the token if needed (optional)
+        return token;
     } catch (error) {
         // Handle specific errors based on the message
         if (error.message === 'Sign in Failed') {
@@ -59,6 +45,7 @@ const loginRequest = async (username, password) => {
         }
     }
 };
+
 
 
 
