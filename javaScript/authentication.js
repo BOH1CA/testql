@@ -46,11 +46,6 @@ const loginRequest = async (username, password) => {
     }
 };
 
-
-
-
-
-// Function to create loginForm
 export function loginForm() {
     const form = document.createElement('form');
     const title = document.createElement('p');
@@ -86,12 +81,20 @@ export function loginForm() {
         const password = inputPassword.value;
 
         try {
-            await loginRequest(username, password);
-            alert("Login successful!");
+            // Ensure the login request is complete before any action
+            const result = await loginRequest(username, password);
 
-            // Redirect to the desired page after successful login
-            window.location.href = 'index.html'; // Change to your target page
+            if (result) {
+                alert("Login successful!");
 
+                // Ensure token is set in localStorage before redirecting
+                if (localStorage.getItem('jwToken')) {
+                    // Redirect to the desired page after successful login
+                    location.assign('index.html'); // Use assign for safer redirect
+                } else {
+                    throw new Error("Token not found. Please try logging in again.");
+                }
+            }
         } catch (error) {
             alert(error.message); 
         }
