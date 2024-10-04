@@ -1,15 +1,10 @@
-import { createLoginForm } from './login.js'
+import { createLoginForm } from './authentication.js'
 import { fetchUserData } from './query.js'
 import { createStatPage } from './statPage.js'
 
-// TO REMOVE EXISTING TOKEN
-// localStorage.removeItem('jwt');
-
-// TO ADD INVALID TOKEN
-// localStorage.setItem('jwt', 'invalidTokenValue');
 
 // Check if there is a token
-if (localStorage.getItem('jwt')) {
+if (localStorage.getItem('jwToken')) {
 
     // Check if the token is correct
     const userData = await fetchUserData();
@@ -19,7 +14,7 @@ if (localStorage.getItem('jwt')) {
 
     } else {
 
-        localStorage.removeItem('jwt');
+        localStorage.removeItem('jwToken');
         location.reload();
 
     }

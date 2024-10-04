@@ -7,7 +7,7 @@ export function createStatPage(userData) {
 
     // Print the token to console
     console.log('token:');
-    console.log(localStorage.getItem('jwt'));
+    console.log(localStorage.getItem('jwToken'));
 
     // Creating the page DIV
     const page = document.createElement('div');
@@ -105,7 +105,7 @@ export function createStatPage(userData) {
     // Adding event listener for logoutButton click
     logoutButton.addEventListener('click', function(event) {
         event.preventDefault();
-        localStorage.removeItem('jwt');
+        localStorage.removeItem('jwToken');
         location.reload();
     });
 
