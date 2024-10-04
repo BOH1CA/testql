@@ -29,7 +29,7 @@ export function loginForm() {
 
     // Helper to display error message
     const showError = (message) => {
-        alert(message); // You can replace this with a more user-friendly error display
+        alert(message);
     };
 
     // Validate form input
@@ -82,7 +82,7 @@ export function loginForm() {
 
             const token = await response.json();
             if (!token) {
-                throw new Error('Token is missing in the response');
+                throw new Error('Token missing in response');
             }
 
             localStorage.setItem('jwToken', token);
