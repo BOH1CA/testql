@@ -103,13 +103,6 @@ export function createAuditRatioDiv(userData) {
     const auditRatioHeading = document.createElement('h2');
     auditRatioHeading.innerText = 'Audits Chart';
 
-    // Creating a div for the donut chart
-    const pieChartDiv = document.createElement('div');
-    pieChartDiv.id = 'pieChartDiv';
-
-    // Calling function to render the donut chart inside pieChartDiv
-    renderDonutChart(userData, pieChartDiv);
-
     // Creating a div for XP amounts
     const xpInfoDiv = document.createElement('div');
     xpInfoDiv.id = 'xpInfoDiv';
