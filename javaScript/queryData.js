@@ -1,39 +1,4 @@
-async function getJwtToken() {
-    const jwToken = localStorage.getItem('jwToken');
-    if (!jwToken) {
-        throw new Error('JWT token not found. Please log in.');
-    }
-    return jwToken;
-}
-
-async function fetchGraphQLData(query, token) {
-    const response = await fetch('https://01.kood.tech/api/graphql-engine/v1/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ query }),
-    });
-
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        const errorMessage = errorResponse.errors?.[0]?.message || 'Network response was not ok';
-        throw new Error(errorMessage);
-    }
-
-    return await response.json();
-}
-
-function extractUserData(responseData) {
-    const user = responseData?.data?.user?.[0];
-    if (!user) {
-        throw new Error('User data not found in response');
-    }
-    return user;
-}
-
-export async function retriveData() {
+async function retriveData() {
     try {
         const jwToken = await getJwtToken();
         console.debug('Using token:', jwToken); // Log token for debugging
@@ -50,7 +15,7 @@ export async function retriveData() {
           transaction (
             order_by: { createdAt: desc }
             where: { 
-              type: { _eq: "xp" } // Ensure type is enclosed in quotes
+              type: { _eq: "xp" }
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
           ) {
@@ -66,7 +31,7 @@ export async function retriveData() {
           xpProgress: transaction (
             order_by: { createdAt: asc }
             where: { 
-              type: { _eq: "xp" } // Ensure type is enclosed in quotes
+              type: { _eq: "xp" }
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
           ) {
@@ -76,7 +41,7 @@ export async function retriveData() {
           projectsLowtoHighXp: transaction (
             order_by: { amount: desc }
             where: { 
-              type: { _eq: "xp" } // Ensure type is enclosed in quotes
+              type: { _eq: "xp" }
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
             limit: 10
@@ -95,11 +60,15 @@ export async function retriveData() {
         const responseData = await fetchGraphQLData(query, jwToken);
         console.debug('GraphQL Response:', responseData); // Log for debugging
 
-        // Instead of only extracting user data, return everything you need
-        const userData = extractUserData(responseData);
-        const transactionsData = responseData.data.transaction;
-        const xpProgressData = responseData.data.xpProgress;
-        const projectsData = responseData.data.projectsLowtoHighXp;
+        // Extract user data
+        const userData = responseData.data?.user?.[0];
+        if (!userData) {
+            throw new Error('User data not found in response');
+        }
+        
+        const transactionsData = responseData.data.transaction || [];
+        const xpProgressData = responseData.data.xpProgress || [];
+        const projectsData = responseData.data.projectsLowtoHighXp || [];
 
         return { userData, transactionsData, xpProgressData, projectsData }; // Return all relevant data
         
@@ -108,6 +77,7 @@ export async function retriveData() {
         throw error; // Rethrow the error for further handling
     }
 }
+
 
 
 
