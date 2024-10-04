@@ -11,12 +11,7 @@ export function createStatPage(userData) {
     // Creating the header container
     const header = document.createElement('div');
     header.id = 'header';
-    header.style.display = 'flex';
-    header.style.justifyContent = 'space-between';
-    header.style.alignItems = 'center';
-    header.style.padding = '10px';
-    header.style.backgroundColor = '#f1f1f1'; // Optional: Background color
-
+    
     // Left side - GraphQL text
     const graphqlText = document.createElement('h2');
     graphqlText.innerText = 'GraphQL';
@@ -81,11 +76,6 @@ function createUserInfoDiv(userData) {
     userCountry.innerText = 'Country: ' + (userData.attrs.addressCountry || 'Country not available');
     userCity.innerText = 'City: ' + (userData.attrs.addressCity || 'City not available');
     userAddr.innerText = 'Address: ' + (userData.attrs.addressStreet || 'Address not available');
-
-    // Adding LogOut button
-    const logoutButton = document.createElement('button');
-    logoutButton.type = 'button';
-    logoutButton.textContent = 'Log out';
 
     // Appending the elements to userInfo div
     userInfo.appendChild(userLogin);
