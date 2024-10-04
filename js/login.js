@@ -29,7 +29,6 @@ export function createLoginForm() {
     form.appendChild(usernameInput);
     form.appendChild(passwordInput);
     form.appendChild(loginButton);
-    form.appendChild(authorButton);
 
     // Adding form to the body
     document.body.appendChild(form);
