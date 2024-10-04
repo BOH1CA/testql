@@ -58,11 +58,25 @@ export function displayStats(userData, transactionsData) {
 export function createUserInfoDiv(userData) {
     // Creating userInfo div
     const userInfo = document.createElement('div');
+    const userFirstName = document.createElement('span');
+    const userLastName = document.createElement('span');
+    const userPhone = document.createElement('span');
+    const userMail = document.createElement('span');
+    const userCountry = document.createElement('span');
+    const userCity = document.createElement('span');
+    const userAddr = document.createElement('span');
     userInfo.id = 'userInfo';
 
     // Creating elements for user information
     const userLogin = document.createElement('h2');
     userLogin.innerText = 'User: ' + (userData.login || 'Login not available');
+    userFirstName.innerText = userData.attrs.firstName || 'First name not available';
+    userLastName.innerText = userData.attrs.lastName || 'Last name not available';
+    userPhone.innerText = userData.attrs.tel || 'Phone not available';
+    userMail.innerText = userData.attrs.email || 'E-mail not available';
+    userCountry.innerText = userData.attrs.addressCountry || 'Country not available';
+    userCity.innerText = userData.attrs.addressCity || 'Phone not available';
+    userAddr.innerText = userData.attrs.addressStreet || 'E-mail not available';
 
     // Appending user information to userInfo div
     userInfo.appendChild(userLogin);
