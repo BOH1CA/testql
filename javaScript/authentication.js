@@ -1,52 +1,45 @@
 // Function to create and display the login form
 export function loginForm() {
-    // Creating the form elements
-    const form = document.createElement('form');
+        const form = document.createElement('form');
+    const title = document.createElement('p');
+    const inputUser = document.createElement('input');
+    const inputPassword = document.createElement('input');
+    const submitButton = document.createElement('button');
+
     form.id = 'loginForm';
+    title.id = 'title';
+    inputUser.id = 'username';
+    inputPassword.id = 'password';
 
-    const loginTitle = document.createElement('p');
-    loginTitle.id = 'login-title';
-    loginTitle.textContent = 'GraphQL: login';
+    inputUser.type = 'text';
+    inputPassword.type = 'password';
+    submitButton.type = 'submit';
 
-    const usernameInput = document.createElement('input');
-    usernameInput.type = 'text';
-    usernameInput.id = 'username';
-    usernameInput.placeholder = 'Username or Email';
-    usernameInput.required = true;
+    title.textContent = 'GraphQL';
+    inputUser.placeholder = 'Username or Email';
+    inputPassword.placeholder = 'Password';
+    inputUser.required = true;
+    inputPassword.required = true;
+    submitButton.textContent = 'Login';
 
-    const passwordInput = document.createElement('input');
-    passwordInput.type = 'password';
-    passwordInput.id = 'password';
-    passwordInput.placeholder = 'Password';
-    passwordInput.required = true;
-
-    const loginButton = document.createElement('button');
-    loginButton.type = 'submit';
-    loginButton.textContent = 'Login';
-
-    // Appending the elements to the form
-    form.appendChild(loginTitle);
-    form.appendChild(usernameInput);
-    form.appendChild(passwordInput);
-    form.appendChild(loginButton);
-
-    // Adding form to the body
+    // Append all elements in one call
+    form.append(title, inputUser, inputPassword, submitButton);
     document.body.appendChild(form);
 
-    // Adding event listener for form submission
-    form.addEventListener('submit', async function(event) {
+    // Event listener for form submission
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+        const username = inputUser.value;
+        const password = inputPassword.value;
 
-        const credentials = btoa(`${username}:${password}`);
+        const encodeInfo = btoa(`${username}:${password}`);
 
         try {
             const response = await fetch('https://01.kood.tech/api/auth/signin', {
                 method: 'POST',
                 headers: {
-                    Authorization: `Basic ${credentials}`,
+                    Authorization: `Basic ${encodeInfo}`,
                     'Content-Type': 'application/json'
                 }
             });
