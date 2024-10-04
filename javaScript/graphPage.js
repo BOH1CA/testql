@@ -128,13 +128,13 @@ export function renderPieChart(userData, pieChartDiv) {
     const passedRatio = userData.auditRatio || 0; // Example ratio
     const remainingRatio = 1 - passedRatio;
 
-    // Calculate angles for the pie chart
-    const passedAngle = passedRatio * 360;
-    const remainingAngle = remainingRatio * 360;
+    // Calculate angles for the pie chart in radians
+    const passedAngle = passedRatio * 2 * Math.PI;  // Convert to radians
+    const remainingAngle = remainingRatio * 2 * Math.PI;  // Convert to radians
 
     // Create paths for passed audits and remaining audits
-    const passedPath = createPiePath(passedAngle, 100, 100, 100, svgNS, '#4caf50');
-    const remainingPath = createPiePath(remainingAngle, 100, 100, 100, svgNS, '#f44336');
+    const passedPath = createPiePath(passedRatio, 100, 100, 100, svgNS, '#4caf50', true);
+    const remainingPath = createPiePath(remainingRatio, 100, 100, 100, svgNS, '#f44336', false);
 
     // Append paths to the SVG
     pieChartSVG.appendChild(passedPath);
@@ -145,13 +145,21 @@ export function renderPieChart(userData, pieChartDiv) {
 }
 
 // Helper function to create SVG path for pie chart
-function createPiePath(angle, cx, cy, radius, svgNS, color) {
-    const largeArcFlag = angle > 180 ? 1 : 0;
-    const x = cx + radius * Math.cos((angle - 90) * (Math.PI / 180));
-    const y = cy + radius * Math.sin((angle - 90) * (Math.PI / 180));
+function createPiePath(ratio, cx, cy, radius, svgNS, color, isFirstSegment) {
+    const angle = ratio * 2 * Math.PI;  // Full circle in radians
+    const largeArcFlag = ratio > 0.5 ? 1 : 0;
+
+    const x = cx + radius * Math.cos(angle - Math.PI / 2);
+    const y = cy + radius * Math.sin(angle - Math.PI / 2);
 
     const path = document.createElementNS(svgNS, 'path');
-    const d = `M ${cx} ${cy} L ${cx + radius} ${cy} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+    const moveTo = `M ${cx} ${cy}`;  // Move to the center of the circle
+    const lineTo = `L ${cx + radius} ${cy}`;  // Line to the edge of the circle
+    const arc = `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x} ${y}`;  // Create arc
+    const closePath = 'Z';  // Close the path
+
+    // If it's the first segment, we draw the full arc; otherwise, just draw the remainder.
+    const d = isFirstSegment ? `${moveTo} ${lineTo} ${arc} ${closePath}` : `${moveTo} ${arc} ${closePath}`;
     path.setAttribute('d', d);
     path.setAttribute('fill', color);
 
