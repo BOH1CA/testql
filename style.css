@@ -107,4 +107,27 @@ button {
 button:hover {
     background-color: #f552ff; /* Darker shade on hover */
 }
+/* Audit Ratio Div Styles */
+#auditRatioDiv {
+    background-color: #ffffff; /* White background */
+    padding: 15px; /* Padding inside the div */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 20px; /* Space between elements */
+    text-align: center; /* Center align content */
+}
+
+/* Audit Ratio Header */
+#auditRatioDiv h2 {
+    font-size: 20px;
+    margin-bottom: 15px; /* Space below the header */
+}
+
+/* Pie Chart SVG */
+#auditPieChartSVG {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: 0 auto; /* Center the pie chart */
+}
 
