@@ -1,5 +1,5 @@
 import { loginForm } from './authentication.js'
-import { fetchUserData } from './query.js'
+import { retriveData } from './queryData.js'
 import { createStatPage } from './statPage.js'
 
 
@@ -7,7 +7,7 @@ import { createStatPage } from './statPage.js'
 if (localStorage.getItem('jwToken')) {
 
     // Check if the token is correct
-    const userData = await fetchUserData();
+    const userData = await retriveData();
     if (userData) {
 
         createStatPage(userData);
