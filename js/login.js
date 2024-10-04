@@ -24,10 +24,6 @@ export function createLoginForm() {
     loginButton.type = 'submit';
     loginButton.textContent = 'Login';
 
-    const authorButton = document.createElement('button');
-    authorButton.type = 'button';
-    authorButton.textContent = 'Author stats: Alex Dubtsov';
-
     // Appending the elements to the form
     form.appendChild(loginTitle);
     form.appendChild(usernameInput);
@@ -74,13 +70,3 @@ export function createLoginForm() {
         location.reload();
     });
 }
-/*     // Adding event listener for authorButton click
-    authorButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        
-        localStorage.setItem('jwt', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDI1MSIsImlhdCI6MTcyMjE0MzQ1MSwiaXAiOiIxNzIuMjMuMC4yIiwiZXhwIjoxNzIyMjI5ODUxLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciJdLCJ4LWhhc3VyYS1jYW1wdXNlcyI6Int9IiwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoidXNlciIsIngtaGFzdXJhLXVzZXItaWQiOiIxMDI1MSIsIngtaGFzdXJhLXRva2VuLWlkIjoiODNlYWVlZDEtYzFjOC00ZTQ0LTg2ZmQtNGU0MTNlMWM3NzAzIn19.9tgXKn36WY8WKPMvWoCvenoyGS-XrI_y3mFE7ABmspw');
-
-        location.reload();
-    });
-
-} */
