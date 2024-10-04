@@ -37,6 +37,7 @@ export async function retriveData() {
     try {
         const jwToken = await getJwtToken();
         console.debug('Using token:', jwToken); // Log token for debugging
+        
         const query = `
         query {
           user {
@@ -47,9 +48,9 @@ export async function retriveData() {
             totalDown
           }
           transaction (
-            order_by: {createdAt: desc}
+            order_by: { createdAt: desc }
             where: { 
-              type: {_eq: xp}
+              type: { _eq: "xp" } // Ensure type is enclosed in quotes
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
           ) {
@@ -63,9 +64,9 @@ export async function retriveData() {
             }
           }
           xpProgress: transaction (
-            order_by: {createdAt: asc}
+            order_by: { createdAt: asc }
             where: { 
-              type: {_eq: xp}
+              type: { _eq: "xp" } // Ensure type is enclosed in quotes
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
           ) {
@@ -73,9 +74,9 @@ export async function retriveData() {
             createdAt
           }
           projectsLowtoHighXp: transaction (
-            order_by: {amount: desc}
+            order_by: { amount: desc }
             where: { 
-              type: {_eq: xp}
+              type: { _eq: "xp" } // Ensure type is enclosed in quotes
               path: { _regex: "^\\/johvi\\/div-01\\/(?!piscine-js\\/).*$" }
             }
             limit: 10
@@ -94,11 +95,21 @@ export async function retriveData() {
         const responseData = await fetchGraphQLData(query, jwToken);
         console.debug('GraphQL Response:', responseData); // Log for debugging
 
-        return extractUserData(responseData);
+        // Instead of only extracting user data, return everything you need
+        const userData = extractUserData(responseData);
+        const transactionsData = responseData.data.transaction;
+        const xpProgressData = responseData.data.xpProgress;
+        const projectsData = responseData.data.projectsLowtoHighXp;
+
+        return { userData, transactionsData, xpProgressData, projectsData }; // Return all relevant data
         
     } catch (error) {
         console.error('Error fetching user data:', error.message);
         throw error; // Rethrow the error for further handling
     }
 }
+
+
+
+
 

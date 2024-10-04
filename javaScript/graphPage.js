@@ -1,6 +1,5 @@
 // Function to create and display the statistics page
-export function displayStats(userData, transactionsData, xpProgressData) {
-    // Print the token to console
+export function displayStats(userData, transactionsData) {
     console.log('token:');
     console.log(localStorage.getItem('jwToken'));
 
@@ -11,7 +10,7 @@ export function displayStats(userData, transactionsData, xpProgressData) {
     // Creating the header container
     const header = document.createElement('div');
     header.id = 'header';
-
+    
     // Left side - GraphQL text
     const graphqlText = document.createElement('h2');
     graphqlText.innerText = 'GraphQL';
@@ -54,6 +53,7 @@ export function displayStats(userData, transactionsData, xpProgressData) {
     document.body.appendChild(page);
 }
 
+
 // Function to create the user info div
 export function createUserInfoDiv(userData) {
     // Creating userInfo div
@@ -80,18 +80,27 @@ export function createAuditRatioDiv(userData, transactionsData) {
     const auditRatioHeading = document.createElement('h2');
     auditRatioHeading.innerText = 'Audit Ratio: ' + userData.auditRatio.toFixed(2);
 
-    // Creating paragraphs for Received XP and Given XP
-    const receivedXP = document.createElement('p');
-    const givenXP = document.createElement('p');
+    // Calculate receivedXP and givenXP based on transactionsData
+    const receivedXP = transactionsData.reduce((total, transaction) => {
+        if (transaction.type === 'xp' && transaction.amount > 0) {
+            return total + transaction.amount;
+        }
+        return total;
+    }, 0);
 
-    // Calculate Received XP and Given XP from transactionsData
-    const receivedXPValue = transactionsData.filter(tx => tx.type === 'xp' && tx.amount > 0)
-                                             .reduce((acc, tx) => acc + tx.amount, 0);
-    const givenXPValue = transactionsData.filter(tx => tx.type === 'xp' && tx.amount < 0)
-                                         .reduce((acc, tx) => acc + Math.abs(tx.amount), 0);
+    const givenXP = transactionsData.reduce((total, transaction) => {
+        if (transaction.type === 'xp' && transaction.amount < 0) {
+            return total + Math.abs(transaction.amount);
+        }
+        return total;
+    }, 0);
 
-    receivedXP.innerText = 'Received XP: ' + receivedXPValue;
-    givenXP.innerText = 'Given XP: ' + givenXPValue;
+    // Display the XP values
+    const receivedXPElement = document.createElement('p');
+    receivedXPElement.innerText = 'Received XP: ' + receivedXP;
+
+    const givenXPElement = document.createElement('p');
+    givenXPElement.innerText = 'Given XP: ' + givenXP;
 
     // Creating a div for the pie chart
     const pieChartDiv = document.createElement('div');
@@ -102,12 +111,13 @@ export function createAuditRatioDiv(userData, transactionsData) {
 
     // Appending the heading, XP values, and pie chart to auditRatioDiv
     auditRatioDiv.appendChild(auditRatioHeading);
-    auditRatioDiv.appendChild(receivedXP);
-    auditRatioDiv.appendChild(givenXP);
+    auditRatioDiv.appendChild(receivedXPElement);
+    auditRatioDiv.appendChild(givenXPElement);
     auditRatioDiv.appendChild(pieChartDiv);
 
     return auditRatioDiv;
 }
+
 
 // Function to render the pie chart
 export function renderPieChart(userData, pieChartDiv) {
@@ -149,6 +159,7 @@ function createPiePath(angle, cx, cy, radius, svgNS, color) {
 
     return path;
 }
+
 
 
 
