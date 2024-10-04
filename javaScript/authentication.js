@@ -12,6 +12,9 @@ const loginRequest = async (username, password) => {
             }
         });
 
+        // Log the entire response object to see all headers and status code
+        console.log('Full response:', response);
+
         // Check if the response is okay (status in the range 200-299)
         if (!response.ok) {
             throw new Error('Sign in Failed');
@@ -34,8 +37,8 @@ const loginRequest = async (username, password) => {
             }
         }
 
-        // Log the entire response data for debugging purposes
-        console.log('Response from server:', data);
+        // Log the entire response data to see the structure
+        console.log('Parsed response data:', data);
 
         // Store the JWT in localStorage (ensure it's in the expected property)
         if (data.token) {
@@ -56,6 +59,7 @@ const loginRequest = async (username, password) => {
         }
     }
 };
+
 
 
 
