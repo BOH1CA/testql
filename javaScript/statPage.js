@@ -1,6 +1,5 @@
 // Function to create and display the statistics page
 export function createStatPage(userData) {
-
     // Print the token to console
     console.log('token:');
     console.log(localStorage.getItem('jwToken'));
@@ -8,6 +7,35 @@ export function createStatPage(userData) {
     // Creating the page DIV
     const page = document.createElement('div');
     page.id = 'statPage';
+
+    // Creating the header container
+    const header = document.createElement('div');
+    header.id = 'header';
+    header.style.display = 'flex';
+    header.style.justifyContent = 'space-between';
+    header.style.alignItems = 'center';
+    header.style.padding = '10px';
+    header.style.backgroundColor = '#f1f1f1'; // Optional: Background color
+
+    // Left side - GraphQL text
+    const graphqlText = document.createElement('h2');
+    graphqlText.innerText = 'GraphQL';
+    header.appendChild(graphqlText);
+
+    // Right side - Logout button
+    const logoutButton = document.createElement('button');
+    logoutButton.type = 'button';
+    logoutButton.textContent = 'Log out';
+
+    // Adding logout functionality
+    logoutButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        localStorage.removeItem('jwToken');
+        location.reload();
+    });
+
+    // Appending the logout button to the header
+    header.appendChild(logoutButton);
 
     // Creating a container for the cross layout
     const crossContainer = document.createElement('div');
@@ -19,14 +47,15 @@ export function createStatPage(userData) {
     // Appending userInfo to the cross container
     crossContainer.appendChild(userInfo);
 
-    // Appending the cross container to the page
+    // Appending header and cross container to the page
+    page.appendChild(header);
     page.appendChild(crossContainer);
 
     // Adding contents to the body
     document.body.appendChild(page);
 
-    // Add logout button functionality and event listeners later...
 }
+
 
 // Function to create userInfo div
 function createUserInfoDiv(userData) {
